@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --white: hsl(0, 0%, 100%);
+  --primary-100: hsl(258, 54%, 52%);
+  --primary-200: hsl(259, 63%, 59%);
+  --primary-300: hsl(265, 89%, 86%);
+  --secondary-100: hsl(210, 20%, 98%);
+  --secondary-200: hsl(220, 17%, 93%);
+  --secondary-300: hsl(217, 16%, 84%);
+  --secondary-400: hsl(221, 13%, 46%);
+  --secondary-500: hsl(216, 18%, 34%);
+  --secondary-600: hsl(217, 24%, 27%);
+  --secondary-700: hsl(220, 43%, 11%);
+
+  --background: hsl(0, 0%, 96%);
+  --foreground: var(--secondary-700);
+}
+
+*,
+*::before,
+*::after {
+  @apply border-secondary-300;
+}
+
+body {
+  @apply bg-background text-foreground text-base min-w-[300px] h-full overflow-x-hidden;
+  font-family: Arial, In, sans-serif;
+}
+
+strong,
+b {
+  @apply font-semibold;
+}
+
+@layer utilities {
+  .view {
+    @apply w-full max-w-7xl mx-auto px-6 xs:px-10 md:px-28 lg:px-36 py-36 md:py-60;
+  }
+}
