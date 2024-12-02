@@ -1,5 +1,11 @@
 import { useState } from "react";
 import Image from "next/image";
+// import { useDraggable, useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 import MoveIcon from "@/assets/icons/move.svg";
 import { IconSize } from "@/lib/constans";
@@ -28,6 +34,23 @@ const MenuPanelItem = ({
     isEditMode: false,
     isVisible: false,
   });
+  // const { isOver: isDropping, setNodeRef: setDroppableRef } = useDroppable({
+  //   id: parentId || "",
+  // });
+  // const {
+  //   attributes,
+  //   listeners,
+  //   setNodeRef: setDraggableRef,
+  //   transform,
+  // } = useDraggable({
+  //   id,
+  // });
+  const {
+    attributes,
+    listeners,
+    setNodeRef: setDraggableRef,
+    transform,
+  } = useSortable({ id });
   const isNested = parentId && parentId !== "";
 
   const activateFormMode = (isEdit: boolean = false) => {
@@ -63,9 +86,17 @@ const MenuPanelItem = ({
         )}
         style={{
           marginLeft: isNested ? nestedLevel * 64 : 0,
+          transform: transform
+            ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+            : "none",
         }}
       >
-        <div className="shrink-0 size-10 flex justify-center items-center">
+        <div
+          ref={setDraggableRef}
+          className="shrink-0 size-10 flex justify-center items-center"
+          {...listeners}
+          {...attributes}
+        >
           <Image
             aria-hidden
             src={MoveIcon}
@@ -117,16 +148,23 @@ const MenuPanelItem = ({
         </div>
       )}
 
-      {!!children?.length &&
-        children.map((item, itemIndex) => (
-          <MenuPanelItem
-            key={`MENU_PANEL_ITEM_${id}_CHILD_${itemIndex}`}
-            data={item}
-            isFirst={itemIndex === 0}
-            parentId={id}
-            nestedLevel={nestedLevel + 1}
-          />
-        ))}
+      {!!children?.length && (
+        <SortableContext
+          id={id}
+          items={children.map((item) => item.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {children.map((item, itemIndex) => (
+            <MenuPanelItem
+              key={`MENU_PANEL_ITEM_${id}_CHILD_${itemIndex}`}
+              data={item}
+              isFirst={itemIndex === 0}
+              parentId={id}
+              nestedLevel={nestedLevel + 1}
+            />
+          ))}
+        </SortableContext>
+      )}
 
       {formMode.isVisible && !formMode.isEditMode && (
         <div className="py-4 px-6">
