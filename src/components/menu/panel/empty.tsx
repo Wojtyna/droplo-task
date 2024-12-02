@@ -1,7 +1,10 @@
 import { useState } from "react";
+import Image from "next/image";
 
 import { Button } from "@/components/button";
 import { MenuPanelForm } from "@/components/menu/panel/form";
+import PlusIcon from "@/assets/icons/plus-circle.svg";
+import { IconSize } from "@/lib/constans";
 
 const MenuPanelEmpty = () => {
   const [isNewItemView, setIsNewItemView] = useState(false);
@@ -19,7 +22,16 @@ const MenuPanelEmpty = () => {
           W tym menu nie ma jeszcze żadnych linków.
         </span>
       </div>
-      <Button onClick={toggleView}>Dodaj pozycję menu</Button>
+      <Button variant="outline-primary" onClick={toggleView}>
+        <Image
+          aria-hidden
+          src={PlusIcon}
+          alt="Dodaj"
+          width={IconSize.m}
+          height={IconSize.m}
+        />
+        Dodaj pozycję menu
+      </Button>
     </div>
   );
 };

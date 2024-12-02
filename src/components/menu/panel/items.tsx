@@ -25,7 +25,7 @@ const MenuPanelItems = ({ items }: { items: AllNavItemProps[] }) => {
         {addingItemMode ? (
           <MenuPanelForm exit={toggleAddingItemMode} />
         ) : (
-          <Button variant="secondary" onClick={toggleAddingItemMode}>
+          <Button variant="outline-secondary" onClick={toggleAddingItemMode}>
             Dodaj pozycję menu
           </Button>
         )}

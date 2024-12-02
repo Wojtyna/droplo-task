@@ -17,8 +17,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
+          "bg-primary-200 border border-primary-200 shadow-sm shadow-secondary-700/5 text-white active:bg-primary-100",
+        "outline-primary":
           "bg-white border border-primary-300 shadow-sm shadow-secondary-700/5 text-primary-100 active:bg-secondary-100",
-        secondary:
+        "outline-secondary":
           "bg-white border border-secondary-300 shadow-sm shadow-secondary-700/5 text-secondary-600 active:bg-secondary-100",
         ghost: "hover:bg-secondary-100 active:bg-secondary-200",
       },

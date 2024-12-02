@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 
 import { AllNavItemProps, NavStateProps } from "@/types";
 
-export const useNavStore = create<NavStateProps>()(
+const useNavStore = create<NavStateProps>()(
   persist(
     (set) => ({
       isLoaded: false,
@@ -131,3 +131,5 @@ export const useNavStore = create<NavStateProps>()(
     }
   )
 );
+
+export { useNavStore };

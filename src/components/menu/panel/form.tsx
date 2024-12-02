@@ -97,10 +97,12 @@ const MenuPanelForm = ({
           )}
         </div>
         <div className="flex gap-2">
-          <Button variant="secondary" onClick={exit}>
+          <Button variant="outline-secondary" onClick={exit}>
             Anuluj
           </Button>
-          <Button type="submit">{isEditMode ? "Edytuj" : "Dodaj"}</Button>
+          <Button variant="outline-primary" type="submit">
+            {isEditMode ? "Edytuj" : "Dodaj"}
+          </Button>
         </div>
       </div>
       <Button variant="ghost" size="icon" onClick={handleCleanButton}>

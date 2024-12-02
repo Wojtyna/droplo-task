@@ -79,14 +79,22 @@ const MenuPanelItem = ({
           <span className="text-secondary-500">{url}</span>
         </div>
         <div className="shrink-0">
-          <Button variant="secondary" group="left" onClick={handleDeleteButton}>
+          <Button
+            variant="outline-secondary"
+            group="left"
+            onClick={handleDeleteButton}
+          >
             Usuń
           </Button>
-          <Button variant="secondary" group="center" onClick={handleEditButton}>
+          <Button
+            variant="outline-secondary"
+            group="center"
+            onClick={handleEditButton}
+          >
             Edytuj
           </Button>
           <Button
-            variant="secondary"
+            variant="outline-secondary"
             group="right"
             onClick={handleAddChildButton}
           >
