@@ -19,9 +19,7 @@ const MenuPanelEmpty = () => {
           W tym menu nie ma jeszcze żadnych linków.
         </span>
       </div>
-      <Button onClick={toggleView} variant="secondary">
-        Dodaj pozycję menu
-      </Button>
+      <Button onClick={toggleView}>Dodaj pozycję menu</Button>
     </div>
   );
 };

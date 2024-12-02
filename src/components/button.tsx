@@ -6,7 +6,7 @@ import { cn } from "@/lib/classUtils";
 
 const buttonVariants = cva(
   cn(
-    "inline-flex items-center justify-center rounded-lg",
+    "inline-flex items-center justify-center",
     "outline-none focus-visible:outline-none",
     "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "disabled:pointer-events-none disabled:opacity-50",
@@ -25,9 +25,16 @@ const buttonVariants = cva(
         default: "w-fit gap-1 px-3.5 py-2.5",
         icon: "size-10 shrink-0",
       },
+      group: {
+        default: "rounded-lg",
+        left: "rounded-l-lg",
+        right: "rounded-r-lg border-l-0",
+        center: "border-l-0",
+      },
     },
     defaultVariants: {
       variant: "default",
+      group: "default",
       size: "default",
     },
   }
@@ -40,11 +47,11 @@ export interface ButtonProps
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, group, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, group, size, className }))}
         ref={ref}
         {...props}
       />

@@ -1,9 +1,9 @@
 import { MenuPanel } from "@/components/menu/panel";
 
-export default function Home() {
-  return (
-    <main className="view flex flex-col justify-center items-center">
-      <MenuPanel />
-    </main>
-  );
-}
+const Home = () => (
+  <main className="view flex flex-col justify-center items-center">
+    <MenuPanel />
+  </main>
+);
+
+export default Home;

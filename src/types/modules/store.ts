@@ -1,22 +1,22 @@
-type ParentData = Omit<NavItemProps, "children" | "id">;
+type NavItemProps = Omit<AllNavItemProps, "children" | "id">;
 
 export interface NavStateProps {
   isLoaded: boolean;
-  items: NavItemProps[];
-  count: number | null;
+  items: AllNavItemProps[];
 
-  addItem: (data: ParentData, parentId?: string) => void;
+  addItem: (data: NavItemProps, parentId?: string) => void;
   updateItem: (
-    data: Partial<ParentData>,
+    data: Partial<NavItemProps>,
     id: string,
     parentId?: string
   ) => void;
   deleteItem: (id: string, parentId?: string) => void;
+  setLoaded: () => void;
 }
 
-export interface NavItemProps {
+export interface AllNavItemProps {
   id: string;
   title: string;
   url: string;
-  children?: NavItemProps[];
+  children?: AllNavItemProps[];
 }
