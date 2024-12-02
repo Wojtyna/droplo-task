@@ -1,5 +1,3 @@
-"use client";
-
 import { MenuPanelNewItem } from "@/components/menu/panel/newItem";
 import { ItemProps } from "@/components/menu/panel";
 
