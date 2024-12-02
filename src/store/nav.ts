@@ -84,7 +84,6 @@ export const useNavStore = create<NavStateProps>()(
         set((state) => {
           const deleteChild = (nodes: AllNavItemProps[]): AllNavItemProps[] =>
             nodes.map((node) => {
-              console.log("child");
               if (node.id === parentId) {
                 const children = node.children;
                 if (children) {

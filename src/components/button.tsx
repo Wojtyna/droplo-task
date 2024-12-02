@@ -1,16 +1,17 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/classUtils";
+import { ButtonProps } from "@/types";
 
 const buttonVariants = cva(
   cn(
     "inline-flex items-center justify-center",
+    "text-sm font-semibold whitespace-nowrap",
     "outline-none focus-visible:outline-none",
-    "[&_svg]:pointer-events-none [&_svg]:shrink-0",
     "disabled:pointer-events-none disabled:opacity-50",
-    "text-sm font-semibold whitespace-nowrap"
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0"
   ),
   {
     variants: {
@@ -39,12 +40,6 @@ const buttonVariants = cva(
     },
   }
 );
-
-export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, group, size, asChild = false, ...props }, ref) => {

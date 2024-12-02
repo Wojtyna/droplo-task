@@ -21,12 +21,34 @@ const MenuPanelItem = ({
   nestedLevel?: number;
 }) => {
   const deleteItem = useNavStore((state) => state.deleteItem);
-  const [addingChildMode, setAddingChildMode] = useState(false);
+  const [formMode, setFormMode] = useState<{
+    isVisible: boolean;
+    isEditMode: boolean;
+  }>({
+    isEditMode: false,
+    isVisible: false,
+  });
+  const isNested = parentId && parentId !== "";
 
-  const toggleAddingChildMode = () => {
-    setAddingChildMode((prev) => !prev);
+  const activateFormMode = (isEdit: boolean = false) => {
+    setFormMode({
+      isVisible: true,
+      isEditMode: isEdit,
+    });
+  };
+  const disableFormMode = () => {
+    setFormMode({
+      isVisible: false,
+      isEditMode: false,
+    });
   };
 
+  const handleAddChildButton = () => {
+    activateFormMode();
+  };
+  const handleEditButton = () => {
+    activateFormMode(true);
+  };
   const handleDeleteButton = () => {
     deleteItem(id, parentId);
   };
@@ -37,10 +59,10 @@ const MenuPanelItem = ({
         className={cn(
           "grow min-w-fit flex items-center py-4 px-6 gap-1 bg-white border border-secondary-200",
           isFirst && "border-t-0",
-          parentId && "rounded-bl-lg"
+          isNested && "rounded-bl-lg"
         )}
         style={{
-          marginLeft: parentId ? nestedLevel * 64 : 0,
+          marginLeft: isNested ? nestedLevel * 64 : 0,
         }}
       >
         <div className="shrink-0 size-10 flex justify-center items-center">
@@ -60,22 +82,32 @@ const MenuPanelItem = ({
           <Button variant="secondary" group="left" onClick={handleDeleteButton}>
             Usuń
           </Button>
-          <Button
-            variant="secondary"
-            group="center"
-            onClick={toggleAddingChildMode}
-          >
+          <Button variant="secondary" group="center" onClick={handleEditButton}>
             Edytuj
           </Button>
           <Button
             variant="secondary"
             group="right"
-            onClick={toggleAddingChildMode}
+            onClick={handleAddChildButton}
           >
             Dodaj pozycję menu
           </Button>
         </div>
       </div>
+
+      {formMode.isVisible && formMode.isEditMode && (
+        <div className="py-4 px-6">
+          <MenuPanelForm
+            exit={disableFormMode}
+            parentId={id}
+            nestedLevel={nestedLevel + 1}
+            data={{
+              title,
+              url,
+            }}
+          />
+        </div>
+      )}
 
       {!!children?.length &&
         children.map((item, itemIndex) => (
@@ -88,10 +120,10 @@ const MenuPanelItem = ({
           />
         ))}
 
-      {addingChildMode && (
+      {formMode.isVisible && !formMode.isEditMode && (
         <div className="py-4 px-6">
           <MenuPanelForm
-            exit={toggleAddingChildMode}
+            exit={disableFormMode}
             parentId={id}
             nestedLevel={nestedLevel + 1}
           />

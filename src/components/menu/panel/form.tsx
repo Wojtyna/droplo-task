@@ -14,16 +14,18 @@ const MenuPanelForm = ({
   exit,
   parentId,
   nestedLevel = 0,
+  data,
 }: {
   exit: () => void;
   parentId?: string;
   nestedLevel?: number;
+  data?: NavItemProps;
 }) => {
   const addItem = useNavStore((store) => store.addItem);
   const formik = useFormik<NavItemProps>({
     initialValues: {
-      title: "",
-      url: "",
+      title: data?.title || "",
+      url: data?.url || "",
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -34,7 +36,6 @@ const MenuPanelForm = ({
         .required("Pole z linkiem jest wymagane"),
     }),
     onSubmit: (data, { resetForm }) => {
-      // console.log(data, parentId);
       addItem(data, parentId);
       resetForm();
       exit();
@@ -43,6 +44,8 @@ const MenuPanelForm = ({
     validateOnChange: false,
     initialStatus: false,
   });
+  const isNested = parentId && parentId !== "";
+  const isEditMode = data && data.title && data.url;
 
   const errorMessages = () =>
     Object.entries(formik.errors).map(([key, value]) => {
@@ -53,14 +56,19 @@ const MenuPanelForm = ({
     });
 
   const handleCleanButton = () => {
-    formik.resetForm();
+    formik.resetForm({
+      values: {
+        title: "",
+        url: "",
+      },
+    });
   };
 
   return (
     <form
       className="grow min-w-fit flex py-5 px-6 gap-5 bg-white rounded-lg border"
       style={{
-        marginLeft: parentId ? nestedLevel * 64 : 0,
+        marginLeft: isNested ? nestedLevel * 64 : 0,
       }}
       onSubmit={formik.handleSubmit}
     >
@@ -92,7 +100,7 @@ const MenuPanelForm = ({
           <Button variant="secondary" onClick={exit}>
             Anuluj
           </Button>
-          <Button type="submit">Dodaj</Button>
+          <Button type="submit">{isEditMode ? "Edytuj" : "Dodaj"}</Button>
         </div>
       </div>
       <Button variant="ghost" size="icon" onClick={handleCleanButton}>

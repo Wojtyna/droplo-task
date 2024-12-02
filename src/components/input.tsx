@@ -3,11 +3,7 @@ import Image from "next/image";
 
 import { cn } from "@/lib/classUtils";
 import { IconSize } from "@/lib/constans";
-
-interface InputProps extends React.ComponentProps<"input"> {
-  iconSrc?: string;
-  iconAlt?: string;
-}
+import { InputProps } from "@/types";
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, title, type, iconSrc, iconAlt, ...props }, ref) => {
@@ -31,10 +27,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <input
             type={type}
             className={cn(
-              "flex h-10 w-full rounded-lg px-3 py-2",
+              "flex h-10 w-full px-3 py-2",
+              "bg-white rounded-lg border border-secondary-300 shadow-sm shadow-secondary-700/5 text-secondary-600",
               "outline-none focus-visible:outline-none",
               "disabled:cursor-not-allowed disabled:opacity-50",
-              "bg-white border border-secondary-300 shadow-sm shadow-secondary-700/5 text-secondary-600",
               "placeholder:text-secondary-400",
               isIcon && "pl-11",
               className
