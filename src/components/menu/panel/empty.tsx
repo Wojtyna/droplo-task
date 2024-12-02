@@ -22,7 +22,7 @@ const MenuPanelEmpty = () => {
           W tym menu nie ma jeszcze żadnych linków.
         </span>
       </div>
-      <Button variant="outline-primary" onClick={toggleView}>
+      <Button onClick={toggleView}>
         <Image
           aria-hidden
           src={PlusIcon}
