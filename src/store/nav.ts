@@ -10,7 +10,7 @@ export const useNavStore = create<NavStateProps>()(
       isLoaded: false,
       items: [],
 
-      addItem: (data, parentId) => {
+      addItem: (data, parentId) =>
         set((state) => {
           const newItem: AllNavItemProps = {
             ...data,
@@ -35,9 +35,8 @@ export const useNavStore = create<NavStateProps>()(
             });
           if (!parentId) return { items: [...state.items, newItem] };
           return { items: addChild(state.items) };
-        });
-      },
-      updateItem: (data, id, parentId) => {
+        }),
+      updateItem: (data, id, parentId) =>
         set((state) => {
           const updateChild = (nodes: AllNavItemProps[]): AllNavItemProps[] =>
             nodes.map((node) => {
@@ -68,7 +67,9 @@ export const useNavStore = create<NavStateProps>()(
               return node;
             });
           if (!parentId) {
-            let currentItem = state.items.find((item) => item.id === id);
+            let currentItem = state.items
+              .slice()
+              .find((item) => item.id === id);
             if (currentItem) {
               currentItem = {
                 ...currentItem,
@@ -78,12 +79,12 @@ export const useNavStore = create<NavStateProps>()(
             }
           }
           return { items: updateChild(state.items) };
-        });
-      },
-      deleteItem: (id, parentId) => {
+        }),
+      deleteItem: (id, parentId) =>
         set((state) => {
           const deleteChild = (nodes: AllNavItemProps[]): AllNavItemProps[] =>
             nodes.map((node) => {
+              console.log("child");
               if (node.id === parentId) {
                 const children = node.children;
                 if (children) {
@@ -112,14 +113,13 @@ export const useNavStore = create<NavStateProps>()(
               (item) => item.id === id
             );
             if (currentItemIndex > -1) {
-              const newData = state.items;
+              const newData = state.items.slice();
               newData.splice(currentItemIndex, 1);
               return { items: newData };
             }
           }
           return { items: deleteChild(state.items) };
-        });
-      },
+        }),
       setLoaded: () => set({ isLoaded: true }),
     }),
     {

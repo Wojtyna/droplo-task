@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/button";
 import { MenuPanelItem } from "@/components/menu/panel/item";
 import { AllNavItemProps } from "@/types";
-import { MenuPanelNewItem } from "@/components/menu/panel/newItem";
+import { MenuPanelForm } from "@/components/menu/panel/form";
 
 const MenuPanelItems = ({ items }: { items: AllNavItemProps[] }) => {
   const [addingItemMode, setAddingItemMode] = useState(false);
@@ -23,7 +23,7 @@ const MenuPanelItems = ({ items }: { items: AllNavItemProps[] }) => {
       ))}
       <div className="py-5 px-6">
         {addingItemMode ? (
-          <MenuPanelNewItem exit={toggleAddingItemMode} />
+          <MenuPanelForm exit={toggleAddingItemMode} />
         ) : (
           <Button variant="secondary" onClick={toggleAddingItemMode}>
             Dodaj pozycję menu

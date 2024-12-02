@@ -7,7 +7,7 @@ import { Button } from "@/components/button";
 import { AllNavItemProps } from "@/types";
 import { useNavStore } from "@/store/nav";
 import { cn } from "@/lib/classUtils";
-import { MenuPanelNewItem } from "@/components/menu/panel/newItem";
+import { MenuPanelForm } from "@/components/menu/panel/form";
 
 const MenuPanelItem = ({
   data: { title, url, id },
@@ -72,7 +72,7 @@ const MenuPanelItem = ({
       </div>
       {addingChildMode && (
         <div className="py-4 px-6">
-          <MenuPanelNewItem exit={toggleAddingChildMode} />
+          <MenuPanelForm exit={toggleAddingChildMode} />
         </div>
       )}
     </>

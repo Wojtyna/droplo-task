@@ -1,4 +1,4 @@
-type NavItemProps = Omit<AllNavItemProps, "children" | "id">;
+export type NavItemProps = Omit<AllNavItemProps, "children" | "id">;
 
 export interface NavStateProps {
   isLoaded: boolean;
