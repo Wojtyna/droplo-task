@@ -13,7 +13,7 @@ const MenuPanelItems = ({ items }: { items: AllNavItemProps[] }) => {
   };
 
   return (
-    <div className="w-full rounded-lg overflow-hidden border">
+    <div className="w-full flex flex-col rounded-lg overflow-hidden border">
       {items.map((item, itemIndex) => (
         <MenuPanelItem
           key={`MENU_PANEL_ITEM_${itemIndex}`}

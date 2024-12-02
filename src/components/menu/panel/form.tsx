@@ -10,7 +10,15 @@ import { IconSize } from "@/lib/constans";
 import { useNavStore } from "@/store/nav";
 import { NavItemProps } from "@/types";
 
-const MenuPanelForm = ({ exit }: { exit: () => void }) => {
+const MenuPanelForm = ({
+  exit,
+  parentId,
+  nestedLevel = 0,
+}: {
+  exit: () => void;
+  parentId?: string;
+  nestedLevel?: number;
+}) => {
   const addItem = useNavStore((store) => store.addItem);
   const formik = useFormik<NavItemProps>({
     initialValues: {
@@ -26,7 +34,8 @@ const MenuPanelForm = ({ exit }: { exit: () => void }) => {
         .required("Pole z linkiem jest wymagane"),
     }),
     onSubmit: (data, { resetForm }) => {
-      addItem(data);
+      // console.log(data, parentId);
+      addItem(data, parentId);
       resetForm();
       exit();
     },
@@ -49,7 +58,10 @@ const MenuPanelForm = ({ exit }: { exit: () => void }) => {
 
   return (
     <form
-      className="w-full flex py-5 px-6 gap-5 bg-white rounded-lg border"
+      className="grow min-w-fit flex py-5 px-6 gap-5 bg-white rounded-lg border"
+      style={{
+        marginLeft: parentId ? nestedLevel * 64 : 0,
+      }}
       onSubmit={formik.handleSubmit}
     >
       <div className="flex-1 flex flex-col gap-4">

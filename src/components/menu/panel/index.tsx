@@ -10,7 +10,7 @@ const MenuPanel = () => {
   const [items, itemsLoaded] = useNavStore(
     useShallow((state) => [state.items, state.isLoaded])
   );
-  console.log(items);
+
   if (!itemsLoaded) return <MenuPanelEmptyLoader />;
   return (
     <div className="w-full">

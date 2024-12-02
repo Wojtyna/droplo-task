@@ -10,13 +10,15 @@ import { cn } from "@/lib/classUtils";
 import { MenuPanelForm } from "@/components/menu/panel/form";
 
 const MenuPanelItem = ({
-  data: { title, url, id },
+  data: { title, url, id, children },
   parentId,
   isFirst = false,
+  nestedLevel = 0,
 }: {
   data: AllNavItemProps;
   parentId?: string;
   isFirst?: boolean;
+  nestedLevel?: number;
 }) => {
   const deleteItem = useNavStore((state) => state.deleteItem);
   const [addingChildMode, setAddingChildMode] = useState(false);
@@ -33,9 +35,13 @@ const MenuPanelItem = ({
     <>
       <div
         className={cn(
-          "w-full flex items-center py-4 px-6 gap-1 bg-white border border-secondary-200",
-          isFirst && "border-t-0"
+          "grow min-w-fit flex items-center py-4 px-6 gap-1 bg-white border border-secondary-200",
+          isFirst && "border-t-0",
+          parentId && "rounded-bl-lg"
         )}
+        style={{
+          marginLeft: parentId ? nestedLevel * 64 : 0,
+        }}
       >
         <div className="shrink-0 size-10 flex justify-center items-center">
           <Image
@@ -70,9 +76,25 @@ const MenuPanelItem = ({
           </Button>
         </div>
       </div>
+
+      {!!children?.length &&
+        children.map((item, itemIndex) => (
+          <MenuPanelItem
+            key={`MENU_PANEL_ITEM_${id}_CHILD_${itemIndex}`}
+            data={item}
+            isFirst={itemIndex === 0}
+            parentId={id}
+            nestedLevel={nestedLevel + 1}
+          />
+        ))}
+
       {addingChildMode && (
         <div className="py-4 px-6">
-          <MenuPanelForm exit={toggleAddingChildMode} />
+          <MenuPanelForm
+            exit={toggleAddingChildMode}
+            parentId={id}
+            nestedLevel={nestedLevel + 1}
+          />
         </div>
       )}
     </>
