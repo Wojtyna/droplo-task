@@ -106,13 +106,14 @@ const MenuPanelItem = ({
       {formMode.isVisible && formMode.isEditMode && (
         <div className="py-4 px-6">
           <MenuPanelForm
-            exit={disableFormMode}
-            parentId={id}
+            id={id}
+            parentId={parentId}
             nestedLevel={nestedLevel + 1}
             data={{
               title,
               url,
             }}
+            exit={disableFormMode}
           />
         </div>
       )}
@@ -131,9 +132,9 @@ const MenuPanelItem = ({
       {formMode.isVisible && !formMode.isEditMode && (
         <div className="py-4 px-6">
           <MenuPanelForm
-            exit={disableFormMode}
             parentId={id}
             nestedLevel={nestedLevel + 1}
+            exit={disableFormMode}
           />
         </div>
       )}

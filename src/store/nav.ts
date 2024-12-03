@@ -67,16 +67,11 @@ const useNavStore = create<NavStateProps>()(
               return node;
             });
           if (!parentId) {
-            let currentItem = state.items
-              .slice()
-              .find((item) => item.id === id);
-            if (currentItem) {
-              currentItem = {
-                ...currentItem,
-                ...data,
-              };
-              return { items: [...state.items, currentItem] };
-            }
+            return {
+              items: state.items.map((item) =>
+                item.id === id ? { ...item, ...data } : item
+              ),
+            };
           }
           return { items: updateChild(state.items) };
         }),

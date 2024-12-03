@@ -9,19 +9,24 @@ import { Button } from "@/components/button";
 import { IconSize } from "@/lib/constans";
 import { useNavStore } from "@/store/nav";
 import { NavItemProps } from "@/types";
+import { useShallow } from "zustand/shallow";
 
 const MenuPanelForm = ({
   exit,
   parentId,
+  id,
   nestedLevel = 0,
   data,
 }: {
   exit: () => void;
+  id?: string;
   parentId?: string;
   nestedLevel?: number;
   data?: NavItemProps;
 }) => {
-  const addItem = useNavStore((store) => store.addItem);
+  const [addItem, updateItem] = useNavStore(
+    useShallow((store) => [store.addItem, store.updateItem])
+  );
   const formik = useFormik<NavItemProps>({
     initialValues: {
       title: data?.title || "",
@@ -36,7 +41,11 @@ const MenuPanelForm = ({
         .required("Pole z linkiem jest wymagane"),
     }),
     onSubmit: (data, { resetForm }) => {
-      addItem(data, parentId);
+      if (isEditMode && id) {
+        updateItem(data, id, parentId);
+      } else {
+        addItem(data, parentId);
+      }
       resetForm();
       exit();
     },
@@ -44,7 +53,7 @@ const MenuPanelForm = ({
     validateOnChange: false,
     initialStatus: false,
   });
-  const isNested = parentId && parentId !== "";
+  const isNested = nestedLevel > 0;
   const isEditMode = data && data.title && data.url;
 
   const errorMessages = () =>
