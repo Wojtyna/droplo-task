@@ -36,9 +36,6 @@ const MenuPanelForm = ({
       title: Yup.string()
         .min(3, "Tytuł musi mieć co najmniej 3 znaki")
         .required("Tytuł jest wymagany"),
-      url: Yup.string()
-        .url("Wpisz poprawny URL, np. https://przykład.pl/")
-        .required("Pole z linkiem jest wymagane"),
     }),
     onSubmit: (data, { resetForm }) => {
       if (isEditMode && id) {

@@ -28,7 +28,7 @@ const MenuPanelItem = ({
     isEditMode: false,
     isVisible: false,
   });
-  const isNested = parentId && parentId !== "";
+  const isNested = parentId && parentId !== "" && nestedLevel > 0;
 
   const activateFormMode = (isEdit: boolean = false) => {
     setFormMode({
@@ -76,7 +76,7 @@ const MenuPanelItem = ({
         </div>
         <div className="flex-1 flex flex-col gap-1.5 text-sm">
           <span className="font-semibold">{title}</span>
-          <span className="text-secondary-500">{url}</span>
+          <span className="text-secondary-500">{url || "Brak linku..."}</span>
         </div>
         <div className="shrink-0">
           <Button

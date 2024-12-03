@@ -17,6 +17,6 @@ export interface NavStateProps {
 export interface AllNavItemProps {
   id: string;
   title: string;
-  url: string;
+  url?: string;
   children?: AllNavItemProps[];
 }
