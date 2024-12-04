@@ -14,6 +14,7 @@ import { AllNavItemProps } from "@/types";
 import { useNavStore } from "@/store/nav";
 import { cn } from "@/lib/classUtils";
 import { MenuPanelForm } from "@/components/menu/panel/form";
+import { DndContext } from "@dnd-kit/core";
 
 const MenuPanelItem = ({
   data: { title, url, id, children },
@@ -34,23 +35,13 @@ const MenuPanelItem = ({
     isEditMode: false,
     isVisible: false,
   });
-  // const { isOver: isDropping, setNodeRef: setDroppableRef } = useDroppable({
-  //   id: parentId || "",
-  // });
-  // const {
-  //   attributes,
-  //   listeners,
-  //   setNodeRef: setDraggableRef,
-  //   transform,
-  // } = useDraggable({
-  //   id,
-  // });
   const {
-    attributes,
-    listeners,
+    attributes: draggableAttributes,
+    listeners: draggableListeners,
     setNodeRef: setDraggableRef,
-    transform,
+    transform: draggableTransform,
   } = useSortable({ id });
+
   const isNested = parentId && parentId !== "";
 
   const activateFormMode = (isEdit: boolean = false) => {
@@ -64,6 +55,27 @@ const MenuPanelItem = ({
       isVisible: false,
       isEditMode: false,
     });
+  };
+
+  // const handleDrag = (event: any) => {
+  //   const { active, over } = event;
+  //   if (over && active.id !== over.id) {
+  //     const oldIndex = items.findIndex((item) => item.id === active.id);
+  //     const newIndex = items.findIndex((item) => item.id === over.id);
+  //     const newItems = [...items];
+  //     const [removed] = newItems.splice(oldIndex, 1);
+  //     newItems.splice(newIndex, 0, removed);
+  //     // onChange(newItems);
+  //     console.log(newItems);
+  //   }
+  // };
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    // Obsłuż logikę przenoszenia elementów
+    console.log("top Przeniesiono:", active.id, "do:", over.id);
   };
 
   const handleAddChildButton = () => {
@@ -86,16 +98,16 @@ const MenuPanelItem = ({
         )}
         style={{
           marginLeft: isNested ? nestedLevel * 64 : 0,
-          transform: transform
-            ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+          transform: draggableTransform
+            ? `translate3d(${draggableTransform.x}px, ${draggableTransform.y}px, 0)`
             : "none",
         }}
       >
         <div
           ref={setDraggableRef}
           className="shrink-0 size-10 flex justify-center items-center"
-          {...listeners}
-          {...attributes}
+          {...draggableListeners}
+          {...draggableAttributes}
         >
           <Image
             aria-hidden
@@ -149,21 +161,23 @@ const MenuPanelItem = ({
       )}
 
       {!!children?.length && (
-        <SortableContext
-          id={id}
-          items={children.map((item) => item.id)}
-          strategy={verticalListSortingStrategy}
-        >
-          {children.map((item, itemIndex) => (
-            <MenuPanelItem
-              key={`MENU_PANEL_ITEM_${id}_CHILD_${itemIndex}`}
-              data={item}
-              isFirst={itemIndex === 0}
-              parentId={id}
-              nestedLevel={nestedLevel + 1}
-            />
-          ))}
-        </SortableContext>
+        <DndContext onDragEnd={handleDragEnd}>
+          <SortableContext
+            // id={id}
+            items={children.map((item) => item.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {children.map((item, itemIndex) => (
+              <MenuPanelItem
+                key={`MENU_PANEL_ITEM_${id}_CHILD_${itemIndex}`}
+                data={item}
+                isFirst={itemIndex === 0}
+                parentId={id}
+                nestedLevel={nestedLevel + 1}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
       )}
 
       {formMode.isVisible && !formMode.isEditMode && (
