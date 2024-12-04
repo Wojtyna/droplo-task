@@ -51,7 +51,7 @@ const MenuPanelForm = ({
     initialStatus: false,
   });
   const isNested = nestedLevel > 0;
-  const isEditMode = data && data.title && data.url;
+  const isEditMode = data && data.title;
 
   const errorMessages = () =>
     Object.entries(formik.errors).map(([key, value]) => {
