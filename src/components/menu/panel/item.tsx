@@ -119,7 +119,7 @@ const MenuPanelItem = ({
         </div>
         <div className="flex-1 flex flex-col gap-1.5 text-sm">
           <span className="font-semibold">{title}</span>
-          <span className="text-secondary-500">{url}</span>
+          <span className="text-secondary-500">{url || "Brak linku..."}</span>
         </div>
         <div className="shrink-0">
           <Button
@@ -149,13 +149,14 @@ const MenuPanelItem = ({
       {formMode.isVisible && formMode.isEditMode && (
         <div className="py-4 px-6">
           <MenuPanelForm
-            exit={disableFormMode}
-            parentId={id}
+            id={id}
+            parentId={parentId}
             nestedLevel={nestedLevel + 1}
             data={{
               title,
               url,
             }}
+            exit={disableFormMode}
           />
         </div>
       )}
@@ -183,9 +184,9 @@ const MenuPanelItem = ({
       {formMode.isVisible && !formMode.isEditMode && (
         <div className="py-4 px-6">
           <MenuPanelForm
-            exit={disableFormMode}
             parentId={id}
             nestedLevel={nestedLevel + 1}
+            exit={disableFormMode}
           />
         </div>
       )}

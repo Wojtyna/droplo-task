@@ -9,19 +9,24 @@ import { Button } from "@/components/button";
 import { IconSize } from "@/lib/constans";
 import { useNavStore } from "@/store/nav";
 import { NavItemProps } from "@/types";
+import { useShallow } from "zustand/shallow";
 
 const MenuPanelForm = ({
   exit,
   parentId,
+  id,
   nestedLevel = 0,
   data,
 }: {
   exit: () => void;
+  id?: string;
   parentId?: string;
   nestedLevel?: number;
   data?: NavItemProps;
 }) => {
-  const addItem = useNavStore((store) => store.addItem);
+  const [addItem, updateItem] = useNavStore(
+    useShallow((store) => [store.addItem, store.updateItem])
+  );
   const formik = useFormik<NavItemProps>({
     initialValues: {
       title: data?.title || "",
@@ -31,12 +36,14 @@ const MenuPanelForm = ({
       title: Yup.string()
         .min(3, "Tytuł musi mieć co najmniej 3 znaki")
         .required("Tytuł jest wymagany"),
-      url: Yup.string()
-        .url("Wpisz poprawny URL, np. https://przykład.pl/")
-        .required("Pole z linkiem jest wymagane"),
+      url: Yup.string().url("Wpisz poprawny URL, np. https://przykład.pl/"),
     }),
     onSubmit: (data, { resetForm }) => {
-      addItem(data, parentId);
+      if (isEditMode && id) {
+        updateItem(data, id, parentId);
+      } else {
+        addItem(data, parentId);
+      }
       resetForm();
       exit();
     },
@@ -44,8 +51,8 @@ const MenuPanelForm = ({
     validateOnChange: false,
     initialStatus: false,
   });
-  const isNested = parentId && parentId !== "";
-  const isEditMode = data && data.title && data.url;
+  const isNested = nestedLevel > 0;
+  const isEditMode = data && data.title;
 
   const errorMessages = () =>
     Object.entries(formik.errors).map(([key, value]) => {
