@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Image from "next/image";
-// import { useDraggable, useDroppable } from "@dnd-kit/core";
 import {
   SortableContext,
   useSortable,
@@ -14,7 +13,8 @@ import { AllNavItemProps } from "@/types";
 import { useNavStore } from "@/store/nav";
 import { cn } from "@/lib/classUtils";
 import { MenuPanelForm } from "@/components/menu/panel/form";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { useShallow } from "zustand/shallow";
 
 const MenuPanelItem = ({
   data: { title, url, id, children },
@@ -27,7 +27,9 @@ const MenuPanelItem = ({
   isFirst?: boolean;
   nestedLevel?: number;
 }) => {
-  const deleteItem = useNavStore((state) => state.deleteItem);
+  const [deleteItem, resortItem] = useNavStore(
+    useShallow((state) => [state.deleteItem, state.resortItem])
+  );
   const [formMode, setFormMode] = useState<{
     isVisible: boolean;
     isEditMode: boolean;
@@ -57,27 +59,11 @@ const MenuPanelItem = ({
     });
   };
 
-  // const handleDrag = (event: any) => {
-  //   const { active, over } = event;
-  //   if (over && active.id !== over.id) {
-  //     const oldIndex = items.findIndex((item) => item.id === active.id);
-  //     const newIndex = items.findIndex((item) => item.id === over.id);
-  //     const newItems = [...items];
-  //     const [removed] = newItems.splice(oldIndex, 1);
-  //     newItems.splice(newIndex, 0, removed);
-  //     // onChange(newItems);
-  //     console.log(newItems);
-  //   }
-  // };
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over) return;
-
-    // Obsłuż logikę przenoszenia elementów
-    console.log("top Przeniesiono:", active.id, "do:", over.id);
+    resortItem(String(active.id), String(over.id));
   };
-
   const handleAddChildButton = () => {
     activateFormMode();
   };
@@ -91,6 +77,7 @@ const MenuPanelItem = ({
   return (
     <>
       <div
+        ref={setDraggableRef}
         className={cn(
           "grow min-w-fit flex items-center py-4 px-6 gap-1 bg-white border border-secondary-200",
           isFirst && "border-t-0",
@@ -104,7 +91,6 @@ const MenuPanelItem = ({
         }}
       >
         <div
-          ref={setDraggableRef}
           className="shrink-0 size-10 flex justify-center items-center"
           {...draggableListeners}
           {...draggableAttributes}
@@ -164,7 +150,6 @@ const MenuPanelItem = ({
       {!!children?.length && (
         <DndContext onDragEnd={handleDragEnd}>
           <SortableContext
-            // id={id}
             items={children.map((item) => item.id)}
             strategy={verticalListSortingStrategy}
           >

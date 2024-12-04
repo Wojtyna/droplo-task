@@ -1,6 +1,6 @@
 "use client";
 import { useShallow } from "zustand/shallow";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -12,16 +12,14 @@ import { useNavStore } from "@/store/nav";
 import { MenuPanelEmptyLoader } from "@/components/menu/panel/loader";
 
 const MenuPanel = () => {
-  const [items, itemsLoaded] = useNavStore(
-    useShallow((state) => [state.items, state.isLoaded])
+  const [items, itemsLoaded, resortItem] = useNavStore(
+    useShallow((state) => [state.items, state.isLoaded, state.resortItem])
   );
-  const handleDragEnd = (event) => {
+
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over) return;
-
-    // Obsłuż logikę przenoszenia elementów
-    console.log("top Przeniesiono:", active.id, "do:", over.id);
+    resortItem(String(active.id), String(over.id));
   };
 
   if (!itemsLoaded) return <MenuPanelEmptyLoader />;

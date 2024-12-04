@@ -12,6 +12,7 @@ export interface NavStateProps {
   ) => void;
   deleteItem: (id: string, parentId?: string) => void;
   setLoaded: () => void;
+  resortItem: (activeId: string, overId: string) => void;
 }
 
 export interface AllNavItemProps {

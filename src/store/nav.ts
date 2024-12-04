@@ -115,6 +115,48 @@ const useNavStore = create<NavStateProps>()(
           return { items: deleteChild(state.items) };
         }),
       setLoaded: () => set({ isLoaded: true }),
+      resortItem: (activeId, overId) => {
+        if (activeId !== overId) {
+          set((state) => {
+            const resortChild = (nodes: AllNavItemProps[]): AllNavItemProps[] =>
+              nodes.map((node) => {
+                if (node.children && node.children.length) {
+                  const childOldIndex = node.children.findIndex(
+                    (item) => item.id === activeId
+                  );
+                  if (childOldIndex > -1) {
+                    const childNewIndex = node.children.findIndex(
+                      (item) => item.id === overId
+                    );
+                    const newData = node.children.slice();
+                    const [removed] = newData.splice(childOldIndex, 1);
+                    newData.splice(childNewIndex, 0, removed);
+                    return { ...node, children: newData };
+                  }
+                  return {
+                    ...node,
+                    children: resortChild(node.children),
+                  };
+                }
+                return node;
+              });
+
+            const flatOldIndex = state.items.findIndex(
+              (item) => item.id === activeId
+            );
+            if (flatOldIndex > -1) {
+              const flatNewIndex = state.items.findIndex(
+                (item) => item.id === overId
+              );
+              const newData = state.items.slice();
+              const [removed] = newData.splice(flatOldIndex, 1);
+              newData.splice(flatNewIndex, 0, removed);
+              return { items: newData };
+            }
+            return { items: resortChild(state.items) };
+          });
+        }
+      },
     }),
     {
       name: "nav",

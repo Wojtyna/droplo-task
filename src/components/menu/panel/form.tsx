@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useShallow } from "zustand/shallow";
 
 import { Input } from "@/components/input";
 import SearchIcon from "@/assets/icons/search-lg.svg";
@@ -9,7 +10,6 @@ import { Button } from "@/components/button";
 import { IconSize } from "@/lib/constans";
 import { useNavStore } from "@/store/nav";
 import { NavItemProps } from "@/types";
-import { useShallow } from "zustand/shallow";
 
 const MenuPanelForm = ({
   exit,
